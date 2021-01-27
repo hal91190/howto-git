@@ -141,3 +141,166 @@ git remote -v
 ----
 git push -u origin master
 ----
+
+== Branches
+=== Branches
+* Une _branche_ est une ligne de développement indépendante de la ligne principale mais qui partage le même historique
++
+[ditaa, "git-branch",svg]
+----
+                           +-------+   +------+
+                           | master|<--| HEAD |
+                           | cRED  |   | cYEL |
+                           +-------+   +------+
+                               |
+                               v
+                           +-------+
+                  +--------| 56GH8 |
+                  |        |       |
+                  v        +-------+
+ +-------+    +-------+
+ | 12CV5 |<---| 3A4E6 |
+ |       |    |       |
+ +-------+    +-------+
+                  ^        +-------+
+                  |        | 78BHD |
+                  +--------|       |
+                           +-------+
+                               ^
+                               |
+                           +--------+
+                           | testing|
+                           | cRED   |
+                           +--------+
+----
+
+* Une branche peut ensuite être fusionnée avec une autre afin d'y reporter les modifications
+
+NOTE: https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell[Git Branching - Branches in a Nutshell], *Pro Git*, _Scott Chacon and Ben Straub_, Apress, 2014.
+
+=== Manipulation de branches
+* L'initialisation d'un dépôt crée une branche nommée _master_ par convention
++
+[source,bash]
+----
+git init
+----
+* Création de la branche _testing_
++
+[source,bash]
+----
+git branch testing
+----
+* Basculer sur la branche _testing_
++
+[source,bash]
+----
+git checkout testing
+----
+* Création et bascule en une seule opération sur la branche _testing_
++
+[source,bash]
+----
+git checkout -b testing
+----
+* Suppression de la branche _testing_
++
+[source,bash]
+----
+git branch -d testing
+----
+
+WARNING: https://github.com/[Github] a https://github.com/github/renaming[modifié les conventions de nommage] de la branche principale qui se nomme `main` pour les nouveaux dépôts créés sur https://github.com/[Github].
+
+=== Fusion de branches
+* La _fusion_ permet de "reporter les changements d'une branche sur une autre.
++
+[source,bash]
+----
+git checkout master
+git merge testing
+----
+* La fusion peut provoquer des conflits
+
+=== Branches distantes
+* Une branche distante fait référence a une branche dans un dépôt distant
+* `git clone` crée automatiquement le dépôt _origin_
+* La commande `git remote` permet de gérer les dépôts distants
+* Récupérer les modifications d'une branche distante
++
+[source,bash]
+----
+git fetch origin
+----
+* Envoyer les modifications sur une branche distante
++
+[source,bash]
+----
+git push origin master
+----
+* Récupérer et fusionner les modifications d'une branche distante
++
+[source,bash]
+----
+git pull origin master
+----
+
+=== Tags
+* Un _tag_ est un marqueur qui fait référence à une révision particulière
+* Lister les tags
++
+[source,bash]
+----
+git tag
+----
+* Placer un tag sur la révision courante (_HEAD_)
++
+[source,bash]
+----
+git tag -a v1.0 -m"Version 1.0"
+----
+* Envoyer le tag _v1.0_ sur le dépôt _origin_
++
+[source,bash]
+----
+git push origin v1.0
+----
+* Envoyer tous les tags sur le dépôt _origin_
++
+[source,bash]
+----
+git push origin --tags
+----
+* Se positionner sur le tag _v1.0_
++
+[source,bash]
+----
+git checkout -b version1 v1.0
+----
+
+== Workflows
+=== Workflows avec git
+* Un _workflow_ décrit un ensemble d'activités ainsi que la manière dont elles s'enchaînent
+* Un workflow git décrit:
+** la façon d'utiliser les branches,
+** quand et comment les fusionner.
+
+=== Workflow centralisé
+* C'est le workflow le plus simple et le plus proche de celui des VCS centralisés
+* Un dépôt fait référence
+* Tout se passe sur la branche principale (_master_)
+* Quand l'historique local est satisfaisant, il est publié sur le dépôt de référence
+* En cas de conflit, les modifications distantes sont reportées localement (_rebase_)
+* L'historique est toujours linéaire
+
+NOTE: https://www.atlassian.com/fr/git/tutorials/comparing-workflows#centralized-workflow[Centralized workflow], Atlassian Git Tutorial
+
+=== Workflow _une branche par fonctionnalité_
+* Chaque développement se déroule sur une branche spécifique (_feature branch_)
+* La branche principale (_master_) ne contient que du code \og fiable\fg{}
+* Un dépôt fait référence
+* Les _feature branches_ sont poussées sur le dépôt central
+* Quand les modifications sont satisfaisantes, la feature branch est fusionnée avec _master_
+* Il est possible d'utiliser les _pull requests_ pour discuter d'une branche spécifique
+
+NOTE: https://www.atlassian.com/fr/git/tutorials/comparing-workflows/feature-branch-workflow[Feature branch workflow], Atlassian Git Tutorial
