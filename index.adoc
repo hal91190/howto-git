@@ -113,7 +113,7 @@ WARNING: Une commande de ce type doit être exécutée pour chaque modification 
 ** résultat de la compilation
 ** fichiers temporaires d'un éditeur
 * Un fichier https://git-scm.com/docs/gitignore[`.gitignore`] placé dans le projet (et dans le dépôt) permet de lister les fichiers et répertoires à ne pas suivre
-* Des \href{https://github.com/github/gitignore}{exemples pour de nombreux types de projets} sont disponibles
+* Des https://github.com/github/gitignore[exemples pour de nombreux types de projets] sont disponibles
 
 == Consulter l'historique
 * La commande https://git-scm.com/docs/git-log[`git log`] liste l'ensemble des révisions enregistrées
