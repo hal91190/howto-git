@@ -79,7 +79,7 @@ git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
 ----
 
-NOTE: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup[Getting Started - First-Time Git Setup]
+NOTE: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup[First-Time Git Setup]
 
 == Manipulations de base
 === Créer un espace pour un projet
@@ -221,20 +221,48 @@ $ git commit -m"Ajoute des exemples aux différentes sections"
 * L'option `--amend` permet de modifier le dernier commit
 +
 CAUTION: Ne jamais modifier un commit qui a déjà été partagé avec un autre dépôt
++
+[source,bash]
+----
+$ git add index.adoc
+$ git commit -m"Ajoute des exemples aux différentes sections" --amend
+[main 9c72c80] Ajoute des exemples aux différentes sections
+ Date: Thu Jan 28 13:27:18 2021 +0100
+ 1 file changed, 148 insertions(+), 34 deletions(-)
+----
 
 === Consulter l'historique des versions
 * La commande https://git-scm.com/docs/git-log[`git log`] liste l'ensemble des révisions enregistrées
++
+[source,bash]
+----
+$ git log
+commit 9c72c80 (HEAD -> main)
+Author: John Doe <john.doe@example.com>
+Date:   Thu Jan 28 13:27:18 2021 +0100
+
+    Ajoute des exemples aux différentes sections
+
+commit 9b77d11
+Author: John Doe <john.doe@example.com>
+Date:   Thu Jan 28 11:00:12 2021 +0100
+
+    Ignore les fichiers générés par asciidoctor
+[...]
+----
 * L'option `-2` (ou `-n` avec n entier) limite aux n dernières
 * `-p` affiche également les différences
-* Le format de la sortie peut être adapté (`--pretty=oneline, `--pretty=format:"..."`)
+* Le format de la sortie peut être adapté (`--pretty=oneline`, `--pretty=format:"..."`)
 * `--graph` montre le graphe des branches et des fusions
 
+NOTE: https://git-scm.com/book/en/v2/Git-Basics-Viewing-the-Commit-History[Viewing the Commit History]
+
 === Ignorer des fichiers
-* Certains fichiers ne doivent pas être suivis
-** résultat de la compilation
-** fichiers temporaires d'un éditeur
+* Certains fichiers ne doivent pas être suivis (résultat de la compilation, fichiers temporaires d'un éditeur, ...)
 * Un fichier https://git-scm.com/docs/gitignore[`.gitignore`] placé dans le projet (et dans le dépôt) permet de lister les fichiers et répertoires à ne pas suivre
 * Des https://github.com/github/gitignore[exemples pour de nombreux types de projets] sont disponibles
+
+NOTE: https://www.atlassian.com/fr/git/tutorials/saving-changes/gitignore[.gitignore]
 
 === Échanger des commits avec un autre dépôt
 * La commande https://git-scm.com/docs/git-remote[`git remote`] permet de gérer les références à un dépôt distant
@@ -242,19 +270,33 @@ CAUTION: Ne jamais modifier un commit qui a déjà été partagé avec un autre 
 [source,bash]
 ----
 # ajoute une référence origin vers un dépôt
-git remote add origin https://github.com/libgit2/libgit2
+$ git remote add origin https://github.com/libgit2/libgit2
 
 # liste les références
-git remote -v
+$ git remote -v
+origin	https://github.com/libgit2/libgit2 (fetch)
+origin	https://github.com/libgit2/libgit2 (push)
 ----
-* `git fetch` récupère les révisions des dépôts référencés
-* `git pull` récupère les révisions et les fusionne
-* `git push` envoie les révisions locales vers une référence
++
+IMPORTANT: La commande `git clone` ajoute automatiquement une référence nommée `origin` vers le dépôt source
+* https://git-scm.com/docs/git-fetch[`git fetch`] récupère les révisions d'un autre dépôt
+* https://git-scm.com/docs/git-pull[`git pull`] récupère les révisions et les intègre
+* https://git-scm.com/docs/git-push[`git push`] envoie les révisions locales vers une référence
 +
 [source,bash]
 ----
-git push -u origin master
+$ git push origin main
+Énumération des objets: 9, fait.
+Décompte des objets: 100% (9/9), fait.
+Compression par delta en utilisant jusqu'à 24 fils d'exécution
+Compression des objets: 100% (5/5), fait.
+Écriture des objets: 100% (6/6), 2.43 Kio | 2.43 Mio/s, fait.
+Total 6 (delta 3), réutilisés 0 (delta 0), réutilisés du pack 0
+remote: Resolving deltas: 100% (3/3), completed with 2 local objects.
+To github.com:user/howto-git.git
+   30fca42..9c72c80  main -> main
 ----
+** l'option `-u` (`--set-upstream`) permet de ne plus préciser la référence et la branche pour les `push` suivants
 
 == Branches
 === Branches
@@ -335,29 +377,6 @@ git checkout master
 git merge testing
 ----
 * La fusion peut provoquer des conflits
-
-=== Branches distantes
-* Une branche distante fait référence a une branche dans un dépôt distant
-* `git clone` crée automatiquement le dépôt _origin_
-* La commande `git remote` permet de gérer les dépôts distants
-* Récupérer les modifications d'une branche distante
-+
-[source,bash]
-----
-git fetch origin
-----
-* Envoyer les modifications sur une branche distante
-+
-[source,bash]
-----
-git push origin master
-----
-* Récupérer et fusionner les modifications d'une branche distante
-+
-[source,bash]
-----
-git pull origin master
-----
 
 === Tags
 * Un _tag_ est un marqueur qui fait référence à une révision particulière
