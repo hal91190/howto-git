@@ -12,27 +12,29 @@ v2021.01.1,
 
 == Introduction
 * `git` est un https://fr.wikipedia.org/wiki/Logiciel_de_gestion_de_versions[système de gestion de versions] distribué (VCS) libre
+** chaque copie d'un dépôt `git` est elle-même un _dépôt_ qui peut être publié
 * Il a été créé par _Linus Torvalds_ pour le développement du noyau Linux
 * Il est utilisé par de nombreux projets (https://github.com/torvalds/linux[noyau Linux], https://github.com/Perl/perl5[interpréteur Perl], https://gitlab.gnome.org/GNOME[Gnome], https://git.samba.org/samba.git/[Samba], https://gitlab.freedesktop.org/xorg[X.org],…)
-* Chaque copie de travail est elle-même un _dépôt_ qui peut être publié
 
-[TIP]
+[NOTE]
 ====
 * https://git-scm.com/[Site officiel] / https://git-scm.com/doc[Documentation]
 * Aide-mémoire git/github (https://training.github.com/downloads/fr/github-git-cheat-sheet/[html] / https://training.github.com/downloads/fr/github-git-cheat-sheet.pdf[pdf])
 * https://ndpsoftware.com/git-cheatsheet.html[Aide-mémoire visuel]
-* https://www.atlassian.com/fr/git[Documentation] (Atlassian)
+* https://www.atlassian.com/fr/git[Documentation] / https://www.atlassian.com/fr/dam/jcr:e7e22f25-bba2-4ef1-a197-53f46b6df4a5/SWTM-2088_Atlassian-Git-Cheatsheet.pdf[Git cheat sheet] (Atlassian)
 ====
 
 == Concepts fondamentaux
 === Dépôt
 * Un _dépôt_ `git` (_repository_) est un espace conservant l'ensemble d'un projet géré par `git`
-** l'ensemble des données manipulées par `git` est conservé dans le répertoire `.git` qui se trouve au niveau de la racine du projet
+** l'ensemble des données manipulées par `git` est conservé dans le répertoire `.git` au niveau de la racine du projet
 * Un dépôt est constitué de plusieurs zones :
 ** l'_espace de travail_ ou _copie de travail_ (_workspace_) contient les documents modifiables par l'utilisateur,
 ** l'_index_ (_staging area_) enregistre les modifications qui feront partie de la prochaine version,
 ** le _dépôt_ (_repository_) conserve les versions successives du projet,
 ** la _remise_ (_stash_) permet de conserver temporairement des modifications.
+
+NOTE: https://ndpsoftware.com/git-cheatsheet.html[Aide-mémoire visuel]
 
 === Les états d'un document
 Un document peut se trouver dans 4 états :
@@ -55,74 +57,186 @@ Après une étape de configuration initiale de `git` (à faire une unique fois a
 ** globale au système (`--system`),
 ** globale pour l'utilisateur (`--global`)
 ** ou spécifique au projet
-* `git config --list` affiche la configuration courante
+* `git config --list  --show-origin` affiche la configuration courante et la provenance de chaque propriété
++
+[source,bash]
+----
+$ git config --list --show-origin
+file:/home/user/.gitconfig       core.pager=less
+file:/home/user/.gitconfig       core.autocrlf=input
+file:/home/user/.gitconfig       color.ui=auto
+file:/home/user/.gitconfig       alias.ci=commit
+[...]
+file:.git/config        core.repositoryformatversion=0
+file:.git/config        core.filemode=true
+[...]
+----
 * Avant la première utilisation de `git` sur un projet, chaque utilisateur définit au minimum son identité
-
-.Configuration intiale de `git`
++
 [source,bash]
 ----
 git config --global user.name "John Doe"
 git config --global user.email johndoe@example.com
 ----
 
-== Créer un espace pour un projet
+NOTE: https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup[Getting Started - First-Time Git Setup]
+
+== Manipulations de base
+=== Créer un espace pour un projet
 Deux approches sont possibles pour créer localement un espace `git` pour un projet :
 
 * initialiser un dépôt local (https://git-scm.com/docs/git-init[`git init`]) ou
 * faire une copie d'un dépôt existant (https://git-scm.com/docs/git-clone[`git clone`]).
 
-=== Initialiser un dépôt
-.dans le répertoire `mon-projet`
+==== Initialiser un dépôt
+* La commande https://git-scm.com/docs/git-init[`git init`] initialise un dépôt `git`
++
 [source,bash]
 ----
-mkdir mon-projet
-cd mon-projet/
-git init
+$ mkdir mon-projet
+$ cd mon-projet/
+$ git init # le répertoire courant mon-projet devient un dépôt git
+Dépôt Git vide initialisé dans /tmp/mon-projet/.git/
 ----
+* Cette commande ajoute un répertoire `.git` à la racine du projet
 
-=== Copier un dépôt existant
-* le clonage d'un dépôt distant peut utiliser les protocoles `https` ou `git` (avec `ssh`)
-
+==== Copier un dépôt existant
+* La commande https://git-scm.com/docs/git-clone[`git clone`] effectue une copie d'un dépôt existant
++
 [source,bash]
 ----
-git clone https://github.com/libgit2/libgit2
+$ git clone https://github.com/libgit2/libgit2
+Clonage dans 'libgit2'...
+remote: Enumerating objects: 107280, done.
+remote: Counting objects: 100% (107280/107280), done.
+remote: Compressing objects: 100% (29501/29501), done.
+remote: Total 107280 (delta 75854), reused 107277 (delta 75851), pack-reused 0
+Réception d objets: 100% (107280/107280), 54.00 Mio | 19.16 Mio/s, fait.
+Résolution des deltas: 100% (75854/75854), fait.
+----
+* Le clonage d'un dépôt distant peut utiliser les protocoles `https` ou `git` (avec `ssh`)
+
+=== Apporter des modifications au projet
+* Chaque modification doit être indexée par `git` avant d'être enregistrée dans une nouvelle version du projet
+* Les commandes https://git-scm.com/docs/git-add[`git add`], https://git-scm.com/docs/git-rm[`git rm`] et https://git-scm.com/docs/git-mv[`git mv`] permettent d'enregistrer des modifications dans l'index
++
+[source,bash]
+----
+$ git add index.adoc
+----
+* Un document peut être retiré de l'index avec la commande `git restore --staged`
++
+[source,bash]
+----
+$ git restore --staged index.adoc
 ----
 
-== Consulter l'état des fichiers
+[IMPORTANT]
+====
+* Une commande de ce type doit être exécutée pour chaque modification devant apparaître dans la prochaine version
+* Les documents produits à partir des sources du projet ne doivent pas être indexés (résultats d'une compilation, documentation générée, ...)
+====
+
+=== Consulter l'état des fichiers
 * La commande https://git-scm.com/docs/git-status[`git status`] affiche l'état des documents  
++
+[source,bash]
+----
+$ git status
+Sur la branche main
+Votre branche est en avance sur 'origin/main' de 1 commit.
+  (utilisez "git push" pour publier vos commits locaux)
+
+Modifications qui ne seront pas validées :
+  (utilisez "git add <fichier>..." pour mettre à jour ce qui sera validé)
+  (utilisez "git restore <fichier>..." pour annuler les modifications dans le répertoire de travail)
+	modifié :         index.adoc
+
+aucune modification n a été ajoutée à la validation (utilisez "git add" ou "git commit -a")
+$ git add index.adoc
+$ git status
+Sur la branche main
+Votre branche est en avance sur 'origin/main' de 1 commit.
+  (utilisez "git push" pour publier vos commits locaux)
+
+Modifications qui seront validées :
+  (utilisez "git restore --staged <fichier>..." pour désindexer)
+	modifié :         index.adoc
+----
 * L'option `--short` (ou `-s`) donne l'information de façon concise
++
+[source,bash]
+----
+$ git status -s
+ M index.adoc
+----
 
-== Ajouter des modifications dans l'index
-* Les commande https://git-scm.com/docs/git-add[`git add`], https://git-scm.com/docs/git-rm[`git rm`] et https://git-scm.com/docs/git-mv[`git mv`] permettent d'enregistrer des modifications dans l'index
+=== Examiner les changements
+La commande https://git-scm.com/docs/git-diff[`git diff`] affiche le détail des changements sur les fichiers.
 
-WARNING: Une commande de ce type doit être exécutée pour chaque modification devant apparaître dans la prochaine version
-
-== Examiner les changements
-* La commande https://git-scm.com/docs/git-diff[`git diff`] affiche le détail des changements sur les fichiers
 * Sans option, les différences entre la copie de travail et l'index sont affichées
++
+[source,bash]
+----
+$ git diff index.adoc
+diff --git i/index.adoc w/index.adoc
+index a82de36..6f14e19 100644
+--- i/index.adoc
++++ w/index.adoc
+@@ -12,28 +12,30 @@ v2021.01.1,
+ 
+ == Introduction
++** chaque copie d un dépôt `git` est elle-même un _dépôt_ qui peut être publié
+ * Il a été créé par _Linus Torvalds_ pour le développement du noyau Linux
+-* Chaque copie de travail est elle-même un _dépôt_ qui peut être publié
+[...]
+@@ -55,74 +57,145 @@ Après une étape de configuration 
+[...]
+----
 * L'option `--cached` effectue la comparaison entre l'index et le dernier commit
++
+[source,bash]
+----
+$ git diff --cached index.adoc
+diff --git c/index.adoc i/index.adoc
+index a82de36..b307752 100644
+--- c/index.adoc
++++ i/index.adoc
+@@ -12,28 +12,30 @@ v2021.01.1,
+[...]
+----
 * Il est également possible de comparer une révision particulière avec la copie de travail, deux révisions, ...
 
-== Créer une nouvelle version
+=== Créer une nouvelle version
 * La commande https://git-scm.com/docs/git-commit[`git commit`] valide les modifications de l'index et crée une nouvelle version (_commit_)
-* Chaque commit est associé à un message (option `-m` de `git commit`)
+** chaque commit est associé à un message (option `-m` de `git commit`)
++
+[source,bash]
+----
+$ git commit -m"Ajoute des exemples aux différentes sections"
+[main 8465838] Ajoute des exemples aux différentes sections
+ 1 file changed, 118 insertions(+), 27 deletions(-)
+----
 * L'option `-a` permet de valider tous les changements des fichiers déjà suivis sans `git add` préalable
+* L'option `--amend` permet de modifier le dernier commit
++
+CAUTION: Ne jamais modifier un commit qui a déjà été partagé avec un autre dépôt
 
-== Ignorer des fichiers
-* Certains fichiers ne doivent pas être suivis
-** résultat de la compilation
-** fichiers temporaires d'un éditeur
-* Un fichier https://git-scm.com/docs/gitignore[`.gitignore`] placé dans le projet (et dans le dépôt) permet de lister les fichiers et répertoires à ne pas suivre
-* Des https://github.com/github/gitignore[exemples pour de nombreux types de projets] sont disponibles
-
-== Consulter l'historique
+=== Consulter l'historique des versions
 * La commande https://git-scm.com/docs/git-log[`git log`] liste l'ensemble des révisions enregistrées
 * L'option `-2` (ou `-n` avec n entier) limite aux n dernières
 * `-p` affiche également les différences
 * Le format de la sortie peut être adapté (`--pretty=oneline, `--pretty=format:"..."`)
 * `--graph` montre le graphe des branches et des fusions
 
-== Échanger des commits avec un autre dépôt
+=== Ignorer des fichiers
+* Certains fichiers ne doivent pas être suivis
+** résultat de la compilation
+** fichiers temporaires d'un éditeur
+* Un fichier https://git-scm.com/docs/gitignore[`.gitignore`] placé dans le projet (et dans le dépôt) permet de lister les fichiers et répertoires à ne pas suivre
+* Des https://github.com/github/gitignore[exemples pour de nombreux types de projets] sont disponibles
+
+=== Échanger des commits avec un autre dépôt
 * La commande https://git-scm.com/docs/git-remote[`git remote`] permet de gérer les références à un dépôt distant
 +
 [source,bash]
