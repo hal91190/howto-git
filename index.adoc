@@ -335,48 +335,81 @@ To github.com:user/howto-git.git
 NOTE: https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell[Git Branching - Branches in a Nutshell], *Pro Git*, _Scott Chacon and Ben Straub_, Apress, 2014.
 
 === Manipulation de branches
+La commande https://git-scm.com/docs/git-branch[`git branch`] permet de manipuler les branche.
+
 * L'initialisation d'un dépôt crée une branche nommée _master_ par convention
 +
 [source,bash]
 ----
-git init
+$ git init
+$ [...] # ajouter quelques commits
+$ git branch
+* master
+----
+** l'option `-r` liste également les branches de suivi distantes (`-a` pour toutes)
++
+[source,bash]
+----
+$ git branch -r
+  origin/HEAD -> origin/main
+  origin/main
+$ git branch -a
+* main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
 ----
 * Création de la branche _testing_
 +
 [source,bash]
 ----
-git branch testing
+$ git branch testing
+$ git branch
+* master
+  testing
+$ git log
+commit 6c622f5 (HEAD -> master, testing)
+[...]
 ----
 * Basculer sur la branche _testing_
 +
 [source,bash]
 ----
-git checkout testing
+$ git checkout testing
+$ git branch
+  master
+* testing
+$ git log
+commit 6c622f5 (HEAD -> testing, master)
+[...]
 ----
 * Création et bascule en une seule opération sur la branche _testing_
 +
 [source,bash]
 ----
-git checkout -b testing
+$ git checkout -b testing
 ----
 * Suppression de la branche _testing_
 +
 [source,bash]
 ----
-git branch -d testing
+$ git branch -d testing
 ----
 
 WARNING: https://github.com/[Github] a https://github.com/github/renaming[modifié les conventions de nommage] de la branche principale qui se nomme `main` pour les nouveaux dépôts créés sur https://github.com/[Github].
 
 === Fusion de branches
-* La _fusion_ permet de "reporter les changements d'une branche sur une autre.
+La commande https://git-scm.com/docs/git-merge[`git merge`] crée, en général, un nouveau commit issu de la fusion des branches impliquées.
+
+* Fusionner `testing` avec `master`
 +
 [source,bash]
 ----
-git checkout master
-git merge testing
+* git checkout master
+* git merge testing
 ----
-* La fusion peut provoquer des conflits
+* Différentes stratégies de fusion peuvent être utilisées
+
+WARNING: La fusion peut provoquer des conflits (voir https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging[Basic Merge Conflicts]).
 
 === Tags
 * Un _tag_ est un marqueur qui fait référence à une révision particulière
@@ -384,37 +417,36 @@ git merge testing
 +
 [source,bash]
 ----
-git tag
+* git tag
 ----
 * Placer un tag sur la révision courante (_HEAD_)
 +
 [source,bash]
 ----
-git tag -a v1.0 -m"Version 1.0"
+* git tag -a v1.0 -m"Version 1.0"
 ----
 * Envoyer le tag _v1.0_ sur le dépôt _origin_
 +
 [source,bash]
 ----
-git push origin v1.0
+* git push origin v1.0
 ----
 * Envoyer tous les tags sur le dépôt _origin_
 +
 [source,bash]
 ----
-git push origin --tags
+* git push origin --tags
 ----
 * Se positionner sur le tag _v1.0_
 +
 [source,bash]
 ----
-git checkout -b version1 v1.0
+* git checkout -b version1 v1.0
 ----
 
 == Workflows
 === Workflows avec git
-* Un _workflow_ décrit un ensemble d'activités ainsi que la manière dont elles s'enchaînent
-* Un workflow git décrit:
+* Un _workflow_ décrit un ensemble d'activités ainsi que la manière dont elles s'enchaînent, i.e.
 ** la façon d'utiliser les branches,
 ** quand et comment les fusionner.
 
