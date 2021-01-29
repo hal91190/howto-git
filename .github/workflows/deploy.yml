@@ -23,6 +23,7 @@ jobs:
           gem install bundler
           bundle install
           asciidoctor -r asciidoctor-diagram -D html index.adoc
+
     - name: Deploy on gh-pages
       uses: NickSchimek/deploy_jamstack_action@v1
       with:
