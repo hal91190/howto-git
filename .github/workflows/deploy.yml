@@ -14,6 +14,16 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      - name: asciidoctor-ghpages
-        uses: manoelcampos/asciidoctor-ghpages-action@v2
+      - name: Install Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+      - name: Run bundler and asciidoctor
+        run: |
+          gem install bundler
+          bundle install
+          asciidoctor -r asciidoctor-diagram -D html index.adoc
+    - name: Deploy on gh-pages
+      uses: NickSchimek/deploy_jamstack_action@v1
+      with:
+        build-dir: html
