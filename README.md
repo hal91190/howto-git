@@ -14,5 +14,5 @@ $ bundle install
 
 ### Construction du document
 ```
-$ asciidoctor -r asciidoctor-diagram index.adoc
+$ asciidoctor -r asciidoctor-diagram -D html index.adoc
 ```
