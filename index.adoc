@@ -22,6 +22,9 @@ v2021.01.1,
 * Aide-mémoire git/github (https://training.github.com/downloads/fr/github-git-cheat-sheet/[html] / https://training.github.com/downloads/fr/github-git-cheat-sheet.pdf[pdf])
 * https://ndpsoftware.com/git-cheatsheet.html[Aide-mémoire visuel]
 * https://www.atlassian.com/fr/git[Documentation] / https://www.atlassian.com/fr/dam/jcr:e7e22f25-bba2-4ef1-a197-53f46b6df4a5/SWTM-2088_Atlassian-Git-Cheatsheet.pdf[Git cheat sheet] (Atlassian)
+* https://github.com/git-school/visualizing-git[Visualize Git]
+* https://buzut.net/cours/versioning-avec-git/[Apprendre la gestion de version avec Git], Quentin Busuttil
+* https://djibril.developpez.com/tutoriels/conception/pro-git/[] (version française)
 ====
 
 == Concepts fondamentaux
@@ -469,3 +472,9 @@ NOTE: https://www.atlassian.com/fr/git/tutorials/comparing-workflows#centralized
 * Il est possible d'utiliser les _pull requests_ pour discuter d'une branche spécifique
 
 NOTE: https://www.atlassian.com/fr/git/tutorials/comparing-workflows/feature-branch-workflow[Feature branch workflow], Atlassian Git Tutorial
+
+== Pour aller plus loin
+* https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration[Adapter la configuration] de `git`
+* https://www.atlassian.com/git/tutorials/advanced-overview[Notions avancées] (en particulier les différences entre `merge` et `rebase`)
+* Les https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain[mécanismes internes] de `git`
+* De nombreuses https://git-scm.com/downloads/guis[interfaces graphiques] existent pour `git`
