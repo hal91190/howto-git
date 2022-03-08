@@ -24,7 +24,8 @@ v2021.01.1,
 * https://www.atlassian.com/fr/git[Documentation] / https://www.atlassian.com/fr/dam/jcr:e7e22f25-bba2-4ef1-a197-53f46b6df4a5/SWTM-2088_Atlassian-Git-Cheatsheet.pdf[Git cheat sheet] (Atlassian)
 * https://github.com/git-school/visualizing-git[Visualize Git]
 * https://buzut.net/cours/versioning-avec-git/[Apprendre la gestion de version avec Git], Quentin Busuttil
-* https://djibril.developpez.com/tutoriels/conception/pro-git/[] (version française)
+* https://ohmygit.org/[Oh My Git!]
+* https://djibril.developpez.com/tutoriels/conception/pro-git/[Pro Git], Scott Chacon (version française Jean-Noël Avila)
 ====
 
 == Concepts fondamentaux
